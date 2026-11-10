@@ -764,15 +764,22 @@ ol.ru li {
 #site .fc,
 #site .wy,
 #site .rv > div {
-  transition: transform .25s ease, box-shadow .25s ease;
-  will-change: transform;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+  will-change: transform, box-shadow;
+  cursor: pointer;
 }
 
 #site .fc:hover,
 #site .wy:hover,
 #site .rv > div:hover {
-  transform: scale(1.04);
-  box-shadow: 0 12px 28px rgba(15, 76, 69, .15);
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 16px 32px rgba(15, 76, 69, 0.16);
+  border-color: rgba(15, 76, 69, 0.3);
+}
+
+#site .fc:active,
+#site .wy:active {
+  transform: translateY(-2px) scale(0.99);
 }
 
 

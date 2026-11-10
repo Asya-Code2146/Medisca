@@ -31,6 +31,7 @@
     "CACHE_STORE": "array",
     "CACHE_DRIVER": "array",
     "SESSION_DRIVER": "cookie",
-    "LOG_CHANNEL": "stderr"
+    "LOG_CHANNEL": "stderr",
+    "GOOGLE_REDIRECT_URI": "https://mediscaa.vercel.app/auth/google/callback"
   }
 }
