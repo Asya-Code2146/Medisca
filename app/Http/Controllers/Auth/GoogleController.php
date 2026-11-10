@@ -48,21 +48,15 @@ class GoogleController extends Controller
 
             $adminEmails = [
                 'mieayama095@gmail.com',
-            ];
-
-            $sekolahEmails = [
+                'assyifaulmuthmainnah12@gmail.com',
+                'hizriuswa15@gmail.com',
                 'mafazhasna5@gmail.com',
                 'nadiraazzahra1329@gmail.com',
             ];
 
-            $petugasEmails = [
-                'assyifaulmuthmainnah12@gmail.com',
-                'hizriuswa15@gmail.com',
-            ];
-
             if (in_array($email, $adminEmails, true) || str_starts_with($email, 'admin@')) {
                 $role = 'admin';
-            } elseif (in_array($email, $sekolahEmails, true) || str_starts_with($email, 'sekolah@')) {
+            } elseif (str_starts_with($email, 'sekolah@')) {
                 $role = 'pihak_sekolah';
             } else {
                 $role = 'guru_uks';

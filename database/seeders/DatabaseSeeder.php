@@ -23,6 +23,25 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
+        $adminEmails = [
+            'mieayama095@gmail.com',
+            'assyifaulmuthmainnah12@gmail.com',
+            'hizriuswa15@gmail.com',
+            'mafazhasna5@gmail.com',
+            'nadiraazzahra1329@gmail.com',
+        ];
+
+        foreach ($adminEmails as $adminEmail) {
+            User::firstOrCreate(
+                ['email' => $adminEmail],
+                [
+                    'name' => explode('@', $adminEmail)[0],
+                    'password' => Hash::make('admin123'),
+                    'role' => 'admin',
+                ]
+            );
+        }
+
         $petugas = User::firstOrCreate(
             ['email' => 'petugas@medisca.sch.id'],
             [
