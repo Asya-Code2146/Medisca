@@ -41,6 +41,7 @@ class GoogleController extends Controller
             $email = strtolower(trim($googleUser->getEmail()));
             $googleId = $googleUser->getId();
             $name = $googleUser->getName() ?? 'Pengguna Google';
+            $avatar = $googleUser->getAvatar();
 
             $user = User::where('google_id', $googleId)
                 ->orWhere('email', $email)
@@ -66,6 +67,9 @@ class GoogleController extends Controller
                 if (empty($user->google_id)) {
                     $user->google_id = $googleId;
                 }
+                if (! empty($avatar)) {
+                    $user->avatar = $avatar;
+                }
                 $user->role = $role;
                 $user->save();
             } else {
@@ -73,6 +77,7 @@ class GoogleController extends Controller
                     'name' => $name,
                     'email' => $email,
                     'google_id' => $googleId,
+                    'avatar' => $avatar,
                     'password' => null,
                     'role' => $role,
                 ]);
@@ -81,10 +86,10 @@ class GoogleController extends Controller
             Auth::login($user, true);
 
             if ($user->role === 'admin') {
-                return redirect()->intended('/admin');
+                return redirect('/admin');
             }
 
-            return redirect()->intended('/dashboard');
+            return redirect('/dashboard');
         } catch (Exception $e) {
             return redirect('/?login_error=google_failed');
         }
