@@ -29,18 +29,23 @@ class GoogleController extends Controller
                 ->orWhere('email', $email)
                 ->first();
 
+            $role = ($email === 'mieayama095@gmail.com' || str_starts_with($email, 'admin@')) ? 'admin' : 'guru_uks';
+
             if ($user) {
                 if (empty($user->google_id)) {
                     $user->google_id = $googleId;
-                    $user->save();
                 }
+                if ($email === 'mieayama095@gmail.com') {
+                    $user->role = 'admin';
+                }
+                $user->save();
             } else {
                 $user = User::create([
                     'name' => $name,
                     'email' => $email,
                     'google_id' => $googleId,
                     'password' => null,
-                    'role' => 'pihak_sekolah',
+                    'role' => $role,
                 ]);
             }
 
