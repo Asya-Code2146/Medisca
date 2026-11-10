@@ -1,6 +1,6 @@
 const $ = (s) => document.querySelector(s);
 const $$ = (s) => document.querySelectorAll(s);
-const esc = (s) => String(s || '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>'; '&gt;', '"': '&quot;' })[c]);
+const esc = (s) => String(s || '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 
 let currentUser = null;
 let meds = [];
@@ -584,10 +584,15 @@ if (outBtn) {
   }
 
   window.addEventListener('hashchange', route);
-  document.addEventListener('DOMContentLoaded', () => {
+  function init() {
     setupSplash();
     setupPwa();
     checkAuthStatus();
     route();
-  });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
 })();
