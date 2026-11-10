@@ -254,12 +254,16 @@
 
         <div>
           <h4>Media sosial</h4>
-          <a href="#top">Instagram</a><a href="#top">Facebook</a><a href="#top">TikTok</a>
+          <a href="https://www.instagram.com/smkn5telkomaceh/" target="_blank" rel="noopener noreferrer">Instagram (@smkn5telkomaceh)</a>
+          <a href="https://www.facebook.com/search/top?q=Smk%20Negeri%205%20Telkom%20Banda%20Aceh" target="_blank" rel="noopener noreferrer">Facebook (Smk Negeri 5 Telkom Banda Aceh)</a>
+          <a href="https://www.tiktok.com/@smkn5telkomaceh/video/7395022131928583430" target="_blank" rel="noopener noreferrer">TikTok (@smkn5telkomaceh)</a>
         </div>
 
         <div>
           <h4>Kontak</h4>
-          <a href="#top">uks@sekolah.sch.id</a><a href="#top">Ruang UKS, lantai 1</a>
+          <a href="mailto:smkn5telkombandaaceh@gmail.com">smkn5telkombandaaceh@gmail.com</a>
+          <a href="tel:06517552314">Telp: 0651-7552314</a>
+          <a href="#top">Ruang UKS, lantai 1</a>
         </div>
 
         <div class="cp">
