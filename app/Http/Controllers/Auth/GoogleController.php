@@ -7,6 +7,7 @@ use App\Models\User;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Laravel\Socialite\Facades\Socialite;
 
 class GoogleController extends Controller
@@ -28,6 +29,7 @@ class GoogleController extends Controller
     {
         return Socialite::driver('google')
             ->redirectUrl($this->getRedirectUri())
+            ->stateless()
             ->redirect();
     }
 
@@ -36,6 +38,7 @@ class GoogleController extends Controller
         try {
             $googleUser = Socialite::driver('google')
                 ->redirectUrl($this->getRedirectUri())
+                ->stateless()
                 ->user();
 
             $email = strtolower(trim($googleUser->getEmail()));
@@ -91,7 +94,8 @@ class GoogleController extends Controller
 
             return redirect('/dashboard');
         } catch (Exception $e) {
-            return redirect('/?login_error=google_failed');
+            Log::error('Google OAuth error: '.$e->getMessage());
+            return redirect('/?login_error='.urlencode($e->getMessage()));
         }
     }
 }
