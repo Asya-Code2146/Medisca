@@ -24,7 +24,7 @@ return [
     ],
 
     'google' => [
-        'client_id' => env('GOOGLE_CLIENT_ID'),
+        'client_id' => env('GOOGLE_CLIENT_ID', '449311777982-9mgsttbmtjojvodpsv9u3ajhvkol39nd.apps.googleusercontent.com'),
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),
         'redirect' => env('GOOGLE_REDIRECT_URI', 'https://mediscaa.vercel.app/auth/google/callback'),
     ],

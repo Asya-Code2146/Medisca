@@ -11,17 +11,34 @@ use Laravel\Socialite\Facades\Socialite;
 
 class GoogleController extends Controller
 {
+    private function getRedirectUri(): string
+    {
+        $uri = env('GOOGLE_REDIRECT_URI');
+        if (! empty($uri)) {
+            return $uri;
+        }
+
+        $host = request()->getHttpHost();
+        $scheme = request()->secure() || str_contains($host, 'vercel.app') ? 'https' : 'http';
+
+        return $scheme.'://'.$host.'/auth/google/callback';
+    }
+
     public function redirectToGoogle(): RedirectResponse
     {
-        return Socialite::driver('google')->redirect();
+        return Socialite::driver('google')
+            ->redirectUrl($this->getRedirectUri())
+            ->redirect();
     }
 
     public function handleGoogleCallback(): RedirectResponse
     {
         try {
-            $googleUser = Socialite::driver('google')->user();
+            $googleUser = Socialite::driver('google')
+                ->redirectUrl($this->getRedirectUri())
+                ->user();
 
-            $email = $googleUser->getEmail();
+            $email = strtolower(trim($googleUser->getEmail()));
             $googleId = $googleUser->getId();
             $name = $googleUser->getName() ?? 'Pengguna Google';
 
@@ -29,15 +46,33 @@ class GoogleController extends Controller
                 ->orWhere('email', $email)
                 ->first();
 
-            $role = ($email === 'mieayama095@gmail.com' || str_starts_with($email, 'admin@')) ? 'admin' : 'guru_uks';
+            $adminEmails = [
+                'mieayama095@gmail.com',
+            ];
+
+            $sekolahEmails = [
+                'mafazhasna5@gmail.com',
+                'nadiraazzahra1329@gmail.com',
+            ];
+
+            $petugasEmails = [
+                'assyifaulmuthmainnah12@gmail.com',
+                'hizriuswa15@gmail.com',
+            ];
+
+            if (in_array($email, $adminEmails, true) || str_starts_with($email, 'admin@')) {
+                $role = 'admin';
+            } elseif (in_array($email, $sekolahEmails, true) || str_starts_with($email, 'sekolah@')) {
+                $role = 'pihak_sekolah';
+            } else {
+                $role = 'guru_uks';
+            }
 
             if ($user) {
                 if (empty($user->google_id)) {
                     $user->google_id = $googleId;
                 }
-                if ($email === 'mieayama095@gmail.com') {
-                    $user->role = 'admin';
-                }
+                $user->role = $role;
                 $user->save();
             } else {
                 $user = User::create([
