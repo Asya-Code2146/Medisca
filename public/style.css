@@ -1123,3 +1123,48 @@ ol.ru li {
   cursor: not-allowed !important;
   pointer-events: none;
 }
+
+.social-icons {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.social-btn {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--sf);
+  border: 1.5px solid var(--ln);
+  color: var(--pine) !important;
+  transition: all 0.25s ease;
+  margin-bottom: 0 !important;
+}
+
+.social-btn:hover {
+  background: var(--pine);
+  color: #ffffff !important;
+  transform: translateY(-3px);
+  border-color: var(--pine);
+  box-shadow: 0 6px 16px rgba(15, 76, 69, 0.2);
+}
+
+.contact-item {
+  display: flex !important;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px !important;
+  font-size: 13.5px !important;
+  color: var(--mut);
+  text-decoration: none;
+  word-break: break-word;
+}
+
+.contact-item svg {
+  flex-shrink: 0;
+  color: var(--pine);
+}
