@@ -14,11 +14,25 @@ foreach ($paths as $path) {
     }
 }
 
-if (! file_exists('/tmp/database.sqlite')) {
-    touch('/tmp/database.sqlite');
+$dbPath = '/tmp/database.sqlite';
+$isNew = ! file_exists($dbPath) || filesize($dbPath) === 0;
+
+if ($isNew) {
+    touch($dbPath);
 }
 
 putenv('VIEW_COMPILED_PATH=/tmp/storage/framework/views');
 $_ENV['VIEW_COMPILED_PATH'] = '/tmp/storage/framework/views';
+putenv('DB_CONNECTION=sqlite');
+putenv('DB_DATABASE=' . $dbPath);
+$_SERVER['DB_CONNECTION'] = 'sqlite';
+$_SERVER['DB_DATABASE'] = $dbPath;
+$_ENV['DB_CONNECTION'] = 'sqlite';
+$_ENV['DB_DATABASE'] = $dbPath;
+
+if ($isNew) {
+    $artisan = __DIR__ . '/../artisan';
+    exec('php ' . escapeshellarg($artisan) . ' migrate --seed --force 2>/dev/null');
+}
 
 require __DIR__.'/../public/index.php';
