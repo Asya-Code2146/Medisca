@@ -14,25 +14,31 @@ foreach ($paths as $path) {
     }
 }
 
-$dbPath = '/tmp/database.sqlite';
-$isNew = ! file_exists($dbPath) || filesize($dbPath) === 0;
-
-if ($isNew) {
-    touch($dbPath);
-}
-
 putenv('VIEW_COMPILED_PATH=/tmp/storage/framework/views');
 $_ENV['VIEW_COMPILED_PATH'] = '/tmp/storage/framework/views';
-putenv('DB_CONNECTION=sqlite');
-putenv('DB_DATABASE=' . $dbPath);
-$_SERVER['DB_CONNECTION'] = 'sqlite';
-$_SERVER['DB_DATABASE'] = $dbPath;
-$_ENV['DB_CONNECTION'] = 'sqlite';
-$_ENV['DB_DATABASE'] = $dbPath;
 
-if ($isNew) {
-    $artisan = __DIR__ . '/../artisan';
-    exec('php ' . escapeshellarg($artisan) . ' migrate --seed --force 2>/dev/null');
-}
+putenv('DB_CONNECTION=pgsql');
+putenv('DB_HOST=aws-1-ap-southeast-2.pooler.supabase.com');
+putenv('DB_PORT=6543');
+putenv('DB_DATABASE=postgres');
+putenv('DB_USERNAME=postgres.ynnhyuzsrakwmzqoqnkh');
+putenv('DB_PASSWORD=mediscauks76');
+putenv('DB_SSLMODE=require');
+
+$_ENV['DB_CONNECTION'] = 'pgsql';
+$_ENV['DB_HOST'] = 'aws-1-ap-southeast-2.pooler.supabase.com';
+$_ENV['DB_PORT'] = '6543';
+$_ENV['DB_DATABASE'] = 'postgres';
+$_ENV['DB_USERNAME'] = 'postgres.ynnhyuzsrakwmzqoqnkh';
+$_ENV['DB_PASSWORD'] = 'mediscauks76';
+$_ENV['DB_SSLMODE'] = 'require';
+
+$_SERVER['DB_CONNECTION'] = 'pgsql';
+$_SERVER['DB_HOST'] = 'aws-1-ap-southeast-2.pooler.supabase.com';
+$_SERVER['DB_PORT'] = '6543';
+$_SERVER['DB_DATABASE'] = 'postgres';
+$_SERVER['DB_USERNAME'] = 'postgres.ynnhyuzsrakwmzqoqnkh';
+$_SERVER['DB_PASSWORD'] = 'mediscauks76';
+$_SERVER['DB_SSLMODE'] = 'require';
 
 require __DIR__.'/../public/index.php';
