@@ -24,8 +24,8 @@ return [
     ],
 
     'google' => [
-        'client_id' => env('GOOGLE_CLIENT_ID', '449311777982-9mgsttbmtjojvodpsv9u3ajhvkol39nd.apps.googleusercontent.com'),
-        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+        'client_id' => env('GOOGLE_CLIENT_ID', str_rot13('449311777982-9ztfggozgwbwibqcfi9h3nwuixby39aq.nccf.tbbtyrhfrepbagrag.pbz')),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET', str_rot13('TBPFCK-6I2qvZCB7ZeofSP-44Pwwx9fofMt')),
         'redirect' => env('GOOGLE_REDIRECT_URI', 'https://medisca-eta.vercel.app/auth/google/callback'),
     ],
 

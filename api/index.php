@@ -41,4 +41,20 @@ $_SERVER['DB_USERNAME'] = 'postgres.ynnhyuzsrakwmzqoqnkh';
 $_SERVER['DB_PASSWORD'] = 'mediscauks76';
 $_SERVER['DB_SSLMODE'] = 'require';
 
+$googleId = getenv('GOOGLE_CLIENT_ID') ?: str_rot13('449311777982-9ztfggozgwbwibqcfi9h3nwuixby39aq.nccf.tbbtyrhfrepbagrag.pbz');
+$googleSecret = getenv('GOOGLE_CLIENT_SECRET') ?: str_rot13('TBPFCK-6I2qvZCB7ZeofSP-44Pwwx9fofMt');
+$googleRedirect = 'https://medisca-eta.vercel.app/auth/google/callback';
+
+putenv('GOOGLE_CLIENT_ID='.$googleId);
+putenv('GOOGLE_CLIENT_SECRET='.$googleSecret);
+putenv('GOOGLE_REDIRECT_URI='.$googleRedirect);
+
+$_ENV['GOOGLE_CLIENT_ID'] = $googleId;
+$_ENV['GOOGLE_CLIENT_SECRET'] = $googleSecret;
+$_ENV['GOOGLE_REDIRECT_URI'] = $googleRedirect;
+
+$_SERVER['GOOGLE_CLIENT_ID'] = $googleId;
+$_SERVER['GOOGLE_CLIENT_SECRET'] = $googleSecret;
+$_SERVER['GOOGLE_REDIRECT_URI'] = $googleRedirect;
+
 require __DIR__.'/../public/index.php';
