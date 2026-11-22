@@ -14,15 +14,14 @@ class GoogleController extends Controller
 {
     private function getRedirectUri(): string
     {
-        $uri = env('GOOGLE_REDIRECT_URI');
-        if (! empty($uri)) {
-            return $uri;
-        }
-
         $host = request()->getHttpHost();
         $scheme = request()->secure() || str_contains($host, 'vercel.app') ? 'https' : 'http';
 
-        return $scheme.'://'.$host.'/auth/google/callback';
+        if (str_contains($host, 'vercel.app') || str_contains($host, 'localhost') || str_contains($host, '127.0.0.1')) {
+            return $scheme.'://'.$host.'/auth/google/callback';
+        }
+
+        return env('GOOGLE_REDIRECT_URI', 'https://medisca-eta.vercel.app/auth/google/callback');
     }
 
     public function redirectToGoogle(): RedirectResponse
