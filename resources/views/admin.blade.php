@@ -26,7 +26,11 @@
       <div class="nav-right">
         <span class="status-pill"><span class="dot"></span> Website Normal</span>
         <div class="user-badge">
-          <div class="avatar">A</div>
+          @if(auth()->check() && auth()->user()->avatar)
+            <img src="{{ auth()->user()->avatar }}" alt="{{ auth()->user()->name }}" class="avatar" style="object-fit:cover; border-radius:50%; width:26px; height:26px;">
+          @else
+            <div class="avatar">{{ strtoupper(substr(auth()->user()->name ?? 'A', 0, 1)) }}</div>
+          @endif
           <span>{{ auth()->user()->name ?? 'Admin UKS' }}</span>
         </div>
         <a href="/" class="btn btn-secondary btn-sm" style="margin-right: 4px;" title="Lihat Aplikasi UKS">
