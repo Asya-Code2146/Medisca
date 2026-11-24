@@ -15,6 +15,29 @@ const getCsrfToken = () => {
   return meta ? meta.getAttribute('content') : '';
 };
 
+const showToast = (msg, type = 'success') => {
+  let c = document.getElementById('toast-container');
+  if (!c) {
+    c = document.createElement('div');
+    c.id = 'toast-container';
+    c.className = 'toast-container';
+    document.body.appendChild(c);
+  }
+  const t = document.createElement('div');
+  t.className = `toast-item toast-${type}`;
+  const icon = type === 'success' ? '✓' : type === 'warning' ? '⚠' : '✕';
+  t.innerHTML = `<span class="toast-icon">${icon}</span><span class="toast-text">${esc(msg)}</span>`;
+  c.appendChild(t);
+  setTimeout(() => t.classList.add('toast-show'), 10);
+  setTimeout(() => {
+    t.classList.remove('toast-show');
+    setTimeout(() => {
+      if (t.parentNode) t.parentNode.removeChild(t);
+    }, 300);
+  }, 3200);
+};
+window.showToast = showToast;
+
 const sy = [
   ['Demam', '🌡️', 'Ukur suhu, istirahat, minum cukup, kompres hangat. Obat: Paracetamol sesuai aturan pakai.', 'Suhu tinggi menetap, kejang, atau lemas berat.'],
   ['Flu', '🤧', 'Istirahat, minum air hangat, hirup Minyak Kayu Putih. Pakai masker agar tidak menular.', 'Sesak napas atau demam lebih dari 3 hari.'],
@@ -216,11 +239,42 @@ function render() {
     const mx = e[0] ? e[0][1] : 1;
     const low = meds.filter((m) => m.status_stok === 'menipis' || m.status_stok === 'kritis');
 
-    h += `<div class="panel"><h3>Laporan dan Rekapitulasi</h3><div class="row">
-      <div class="stat"><b>${sick.length}</b>Siswa sakit tercatat</div>
-      <div class="stat"><b>${sick.filter((s) => s.status === 'sedang_dirawat').length}</b>Sedang dirawat</div>
-      <div class="stat"><b style="color:var(--co);">${sick.filter((s) => s.status === 'dirujuk').length}</b>Dirujuk</div>
-      <div class="stat"><b>${low.length}</b>Stok menipis / kritis</div>
+    h += `<div class="panel"><h3>Laporan dan Rekapitulasi</h3><div class="stat-grid">
+      <div class="stat-card stat-blue">
+        <div class="stat-icon-wrapper stat-icon-blue">🤒</div>
+        <div class="stat-card-info">
+          <b>${sick.length}</b>
+          <span>Siswa Sakit Tercatat</span>
+        </div>
+      </div>
+      <div class="stat-card stat-amber">
+        <div class="stat-icon-wrapper stat-icon-amber">🛏️</div>
+        <div class="stat-card-info">
+          <b>${sick.filter((s) => s.status === 'sedang_dirawat').length}</b>
+          <span>Sedang Dirawat di UKS</span>
+        </div>
+      </div>
+      <div class="stat-card stat-red">
+        <div class="stat-icon-wrapper stat-icon-red">🚑</div>
+        <div class="stat-card-info">
+          <b style="color:#dc2626;">${sick.filter((s) => s.status === 'dirujuk').length}</b>
+          <span>Dirujuk ke Faskes</span>
+        </div>
+      </div>
+      <div class="stat-card stat-orange">
+        <div class="stat-icon-wrapper stat-icon-orange">💊</div>
+        <div class="stat-card-info">
+          <b>${low.length}</b>
+          <span>Stok Obat Kritis</span>
+        </div>
+      </div>
+      <div class="stat-card stat-teal">
+        <div class="stat-icon-wrapper stat-icon-teal">📄</div>
+        <div class="stat-card-info">
+          <b>${sick.filter((s) => s.status === 'dirujuk' || s.status === 'sedang_dirawat').length}</b>
+          <span>Surat Dispensasi Khusus</span>
+        </div>
+      </div>
     </div>
     <h3 style="font-size:17px;margin-top:20px;">Keluhan terbanyak</h3>${e
       .map((x) => `<div class="bar"><span>${esc(x[0])}</span><i style="width:${(x[1] / mx) * 100}%"></i><b>${x[1]}</b></div>`)
@@ -334,7 +388,7 @@ function setupPwa() {
         }
         deferredPrompt = null;
       } else {
-        alert('Untuk menginstal aplikasi, silakan gunakan menu browser ("Tambahkan ke Layar Utama" / "Install Medisca").');
+        showToast('Gunakan menu browser untuk menginstal Medisca ("Install App" / "Tambahkan ke Layar Utama").', 'warning');
       }
     });
   }
@@ -375,7 +429,7 @@ document.addEventListener('click', async (e) => {
   const medId = t.dataset ? t.dataset.id : null;
   if (action && medId) {
     if (currentUser && currentUser.role === 'pihak_sekolah') {
-      alert('Akses Ditolak: Role Pihak Sekolah hanya memiliki akses pemantauan data (Read-Only).');
+      showToast('Akses Ditolak: Role Pihak Sekolah hanya memiliki akses pemantauan data (Read-Only).', 'warning');
       return;
     }
 
@@ -395,13 +449,14 @@ document.addEventListener('click', async (e) => {
         if (item) {
           item.stok = data.data.stok;
           item.status_stok = data.data.status_stok;
+          showToast(`Stok ${item.nama_obat} berhasil diperbarui (${item.stok} ${item.satuan}).`, 'success');
         }
         render();
       } else {
-        alert(data.message || 'Gagal mengubah stok obat.');
+        showToast(data.message || 'Gagal mengubah stok obat.', 'error');
       }
     } catch (err) {
-      alert('Terjadi kesalahan koneksi.');
+      showToast('Terjadi kesalahan koneksi.', 'error');
     }
   }
 
@@ -430,7 +485,7 @@ document.addEventListener('submit', async (e) => {
   if (e.target.id === 'fs') {
     e.preventDefault();
     if (currentUser && currentUser.role === 'pihak_sekolah') {
-      alert('Akses Ditolak: Role Pihak Sekolah hanya memiliki akses pemantauan (Read-Only).');
+      showToast('Akses Ditolak: Role Pihak Sekolah hanya memiliki akses pemantauan (Read-Only).', 'warning');
       return;
     }
 
@@ -468,12 +523,12 @@ document.addEventListener('submit', async (e) => {
         }
         form.reset();
         render();
-        alert('Rekam medis siswa berhasil disimpan.');
+        showToast(`Rekam medis siswa ${payload.nama_pasien} berhasil disimpan.`, 'success');
       } else {
-        alert(data.message || 'Gagal menyimpan data siswa.');
+        showToast(data.message || 'Gagal menyimpan data siswa.', 'error');
       }
     } catch (err) {
-      alert('Gagal menghubungi server.');
+      showToast('Gagal menghubungi server.', 'error');
     }
   }
 });

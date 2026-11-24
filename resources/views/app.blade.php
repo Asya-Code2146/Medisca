@@ -11,7 +11,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="/style.css?v=3" />
+    <link rel="stylesheet" href="/style.css?v=4" />
   </head>
 
   <body>
@@ -361,7 +361,7 @@
       </div>
     </div>
 
-    <script src="/script.js?v=3"></script>
+    <script src="/script.js?v=4"></script>
 
   </body>
 </html>
