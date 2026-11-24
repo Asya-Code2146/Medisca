@@ -11,7 +11,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="style.css?v=3" />
   </head>
 
   <body>
@@ -342,7 +342,26 @@
       </div>
     </div>
 
-    <script src="script.js"></script>
+    <div
+      class="modal modal-dispensasi"
+      id="dispensasiModal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="dispensasiLetter"
+    >
+      <div class="box box-dispensasi">
+        <div class="modal-dispensasi-actions no-print">
+          <button type="button" class="btn btn-print" onclick="window.print()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7"></path><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><path d="M6 14h12v8H6z"></path></svg>
+            Cetak Surat (PDF / Print)
+          </button>
+          <button type="button" class="btn o" onclick="closeDispensasiModal()">Tutup</button>
+        </div>
+        <div id="printableLetterContainer"></div>
+      </div>
+    </div>
+
+    <script src="script.js?v=3"></script>
 
   </body>
 </html>

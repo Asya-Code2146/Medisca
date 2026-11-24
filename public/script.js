@@ -175,6 +175,7 @@ function render() {
         <th>Obat Diberikan</th>
         <th>Tindakan</th>
         <th>Status</th>
+        <th style="text-align:center;">Dispensasi</th>
       </tr>
       ${sick
         .map(
@@ -186,6 +187,12 @@ function render() {
         <td>${esc(s.medicine ? s.medicine.nama_obat : 'Tanpa obat')}</td>
         <td>${esc(s.tindakan || '-')}</td>
         <td><span class="pill ${s.status === 'dirujuk' ? 'lo' : ''}">${esc(s.status.replace('_', ' '))}</span></td>
+        <td style="text-align:center; white-space:nowrap;">
+          <button type="button" class="btn-dispensasi ${s.status === 'dirujuk' || s.status === 'sedang_dirawat' ? 'btn-dispensasi-urgent' : ''}" onclick="printDispensasiLetter(${s.id})" title="${s.status === 'dirujuk' ? 'Kondisi Parah: Cetak Surat Rujukan Medis' : s.status === 'sedang_dirawat' ? 'Perawatan Khusus: Cetak Surat Sakit' : 'Cetak Surat Dispensasi UKS'}">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7"></path><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><path d="M6 14h12v8H6z"></path></svg>
+            ${s.status === 'dirujuk' ? 'Surat Rujukan' : s.status === 'sedang_dirawat' ? 'Surat Sakit' : 'Surat Izin'}
+          </button>
+        </td>
       </tr>`
         )
         .join('')}
@@ -562,6 +569,161 @@ if (outBtn) {
     if (toAdmin) toAdmin.remove();
   };
 }
+
+window.closeDispensasiModal = function () {
+  const m = document.getElementById('dispensasiModal');
+  if (m) m.classList.remove('on');
+};
+
+window.printDispensasiLetter = function (id) {
+  const s = sick.find((x) => x.id === id);
+  if (!s) return;
+  const now = new Date();
+  const romanMonths = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
+  const monthNames = [
+    'Januari',
+    'Februari',
+    'Maret',
+    'April',
+    'Mei',
+    'Juni',
+    'Juli',
+    'Agustus',
+    'September',
+    'Oktober',
+    'November',
+    'Desember'
+  ];
+  const dayNames = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+
+  let recDate = now;
+  if (s.created_at) {
+    const parsed = new Date(s.created_at);
+    if (!isNaN(parsed.getTime())) recDate = parsed;
+  }
+
+  const dayName = dayNames[recDate.getDay()];
+  const dateFormatted = `${recDate.getDate()} ${monthNames[recDate.getMonth()]} ${recDate.getFullYear()}`;
+  const timeFormatted = `${String(recDate.getHours()).padStart(2, '0')}:${String(recDate.getMinutes()).padStart(2, '0')} WIB`;
+  const romanMonth = romanMonths[recDate.getMonth()];
+  const year = recDate.getFullYear();
+  const docNo = `421.5 / UKS-SMKN5 / ${romanMonth} / ${year} / ${String(s.id).padStart(3, '0')}`;
+
+  let statusText = 'ISTIRAHAT DI RUANG UKS';
+  let rekomendasi =
+    'Siswa yang bersangkutan dalam kondisi sakit dan membutuhkan waktu istirahat di bawah pengawasan petugas UKS, sehingga diberikan izin dispensasi sementara dari kegiatan belajar mengajar (KBM).';
+  let statusColor = '#0f766e';
+
+  if (s.status === 'dirujuk') {
+    statusText = 'DIRUJUK KE FASILITAS KESEHATAN (DARURAT / PARAH)';
+    rekomendasi =
+      'Berdasarkan hasil pemeriksaan medis awal di ruang UKS, kondisi siswa memerlukan penanganan medis lanjutan dan segera <b>DIRUJUK ke Fasilitas Kesehatan (Puskesmas / Rumah Sakit)</b>. Siswa diberikan izin/dispensasi penuh meninggalkan lingkungan sekolah didampingi petugas atau keluarga.';
+    statusColor = '#b91c1c';
+  } else if (s.status === 'sedang_dirawat') {
+    statusText = 'PERAWATAN INTENSIF UKS / IZIN PULANG';
+    rekomendasi =
+      'Siswa mengalami sakit yang memerlukan penanganan istirahat baring intensif di ruang UKS atau disarankan untuk dipulangkan ke rumah di bawah pengawasan orang tua/wali. Siswa diberikan dispensasi tidak mengikuti kegiatan belajar mengajar (KBM) hari ini.';
+    statusColor = '#b45309';
+  } else if (s.status === 'selesai') {
+    statusText = 'SELESAI DITANGANI (KEMBALI KE KELAS)';
+    rekomendasi =
+      'Siswa telah diberikan penanganan medis awal di ruang UKS dan kondisi telah membaik untuk melanjutkan kegiatan belajar mengajar (KBM).';
+  }
+
+  const html = `
+    <div class="dispensasi-letter" id="printableLetter">
+      <div class="letter-kop">
+        <div class="kop-logo-left">
+          <img src="/logo.png" alt="Logo" class="kop-logo-img">
+        </div>
+        <div class="kop-text">
+          <h3>PEMERINTAH ACEH &bull; DINAS PENDIDIKAN</h3>
+          <h2>SMK NEGERI 5 TELKOM BANDA ACEH</h2>
+          <h4>UNIT KESEHATAN SEKOLAH (UKS) MEDISCA</h4>
+          <p>Jalan Teuku Nyak Arief No. 222, Syiah Kuala, Kota Banda Aceh, Aceh 23115</p>
+          <p>Telepon: (0651) 7552314 | Pos-el: smkn5telkombandaaceh@gmail.com</p>
+        </div>
+      </div>
+      <div class="kop-separator"></div>
+
+      <div class="letter-header">
+        <h3 class="letter-title">SURAT KETERANGAN DISPENSASI SAKIT SISWA</h3>
+        <p class="letter-number">Nomor: ${docNo}</p>
+      </div>
+
+      <div class="letter-body">
+        <p>Yang bertanda tangan di bawah ini, Petugas Unit Kesehatan Sekolah (UKS) SMK Negeri 5 Telkom Banda Aceh menerangkan dengan sebenarnya bahwa:</p>
+        
+        <table class="letter-data-table">
+          <tr>
+            <td style="width: 170px;">Nama Siswa</td>
+            <td style="width: 15px;">:</td>
+            <td><b>${esc(s.nama_pasien)}</b></td>
+          </tr>
+          <tr>
+            <td>Kelas / Jurusan</td>
+            <td>:</td>
+            <td><b>${esc(s.kelas_pasien || '-')}</b></td>
+          </tr>
+          <tr>
+            <td>Waktu Pemeriksaan</td>
+            <td>:</td>
+            <td>${dayName}, ${dateFormatted} pukul ${timeFormatted}</td>
+          </tr>
+          <tr>
+            <td>Keluhan Kesehatan</td>
+            <td>:</td>
+            <td>${esc(s.keluhan)}</td>
+          </tr>
+          <tr>
+            <td>Obat Diberikan</td>
+            <td>:</td>
+            <td>${esc(s.medicine ? s.medicine.nama_obat : 'Tanpa pemberian obat')} ${s.jumlah_obat ? '(' + s.jumlah_obat + ')' : ''}</td>
+          </tr>
+          <tr>
+            <td>Tindakan Medis UKS</td>
+            <td>:</td>
+            <td>${esc(s.tindakan || 'Pemeriksaan tanda vital dan observasi')}</td>
+          </tr>
+          <tr>
+            <td>Status / Rekomendasi</td>
+            <td>:</td>
+            <td><span class="letter-status-badge" style="background:${statusColor}15; color:${statusColor}; border:1px solid ${statusColor}40;">${statusText}</span></td>
+          </tr>
+        </table>
+
+        <div class="letter-notes">
+          <p><b>Keterangan / Tindakan Lanjutan:</b></p>
+          <p>${rekomendasi}</p>
+        </div>
+
+        <p class="letter-closing">Demikian surat keterangan ini diterbitkan dengan sebenar-benarnya untuk dipergunakan sebagai bukti dispensasi kehadiran pada Kegiatan Belajar Mengajar (KBM) dan koordinasi bersama Guru Piket / Wali Kelas.</p>
+      </div>
+
+      <div class="letter-signatures">
+        <div class="sig-col">
+          <p>Mengetahui,</p>
+          <p class="sig-role">Guru Piket Sekolah</p>
+          <div class="sig-space"></div>
+          <p class="sig-name">( .................................................... )</p>
+          <p class="sig-nip">NIP. -</p>
+        </div>
+        <div class="sig-col">
+          <p>Banda Aceh, ${dateFormatted}</p>
+          <p class="sig-role">Petugas / Pembina UKS Medisca</p>
+          <div class="sig-space"></div>
+          <p class="sig-name"><b>${esc(currentUser ? currentUser.name : 'Petugas Medisca')}</b></p>
+          <p class="sig-nip">Petugas Layanan Kesehatan Sekolah</p>
+        </div>
+      </div>
+    </div>
+  `;
+
+  const container = document.getElementById('printableLetterContainer');
+  if (container) container.innerHTML = html;
+  const modal = document.getElementById('dispensasiModal');
+  if (modal) modal.classList.add('on');
+};
 
 (function () {
   const R = ['stok', 'sakit', 'gej', 'atur', 'lap', 'edu'];

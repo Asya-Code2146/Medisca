@@ -1212,3 +1212,293 @@ ol.ru li {
   color: var(--pine);
   flex-shrink: 0;
 }
+
+.btn-dispensasi {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #f1f5f9;
+  border: 1px solid var(--ln);
+  color: #334155;
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.btn-dispensasi:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.btn-dispensasi-urgent {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #b91c1c;
+  font-weight: 700;
+}
+
+.btn-dispensasi-urgent:hover {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.modal-dispensasi {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.65);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+  backdrop-filter: blur(4px);
+}
+
+.modal-dispensasi.on {
+  display: flex;
+}
+
+.box-dispensasi {
+  background: #ffffff;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 800px;
+  max-height: 92vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+}
+
+.modal-dispensasi-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.btn-print {
+  background: var(--pine);
+  color: #ffffff;
+}
+
+.btn-print:hover {
+  background: #115e59;
+}
+
+.dispensasi-letter {
+  background: #ffffff;
+  color: #1e293b;
+  font-family: 'Times New Roman', Times, serif;
+  padding: 24px 30px;
+  line-height: 1.45;
+}
+
+.letter-kop {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  text-align: center;
+}
+
+.kop-logo-left {
+  flex-shrink: 0;
+}
+
+.kop-logo-img {
+  width: 68px;
+  height: 68px;
+  object-fit: contain;
+}
+
+.kop-text {
+  flex: 1;
+}
+
+.kop-text h3 {
+  font-size: 13pt;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  margin: 0;
+  color: #0f172a;
+}
+
+.kop-text h2 {
+  font-size: 15pt;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  margin: 2px 0;
+  color: #0f172a;
+}
+
+.kop-text h4 {
+  font-size: 11pt;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin: 0 0 2px;
+  color: #0f766e;
+}
+
+.kop-text p {
+  font-size: 9pt;
+  margin: 0;
+  color: #334155;
+  line-height: 1.3;
+}
+
+.kop-separator {
+  border-top: 3px solid #0f172a;
+  border-bottom: 1px solid #0f172a;
+  height: 3px;
+  margin: 10px 0 16px;
+}
+
+.letter-header {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.letter-title {
+  font-size: 12.5pt;
+  font-weight: 800;
+  text-decoration: underline;
+  margin: 0 0 3px;
+  color: #0f172a;
+  letter-spacing: 0.5px;
+}
+
+.letter-number {
+  font-size: 10pt;
+  margin: 0;
+  color: #334155;
+}
+
+.letter-body {
+  font-size: 10.5pt;
+  line-height: 1.5;
+  color: #1e293b;
+}
+
+.letter-body p {
+  margin: 0 0 10px;
+}
+
+.letter-data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0;
+  font-size: 10pt;
+}
+
+.letter-data-table td {
+  padding: 4px 6px;
+  vertical-align: top;
+  border: none;
+}
+
+.letter-status-badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 9pt;
+  letter-spacing: 0.3px;
+}
+
+.letter-notes {
+  background: #f8fafc;
+  border-left: 3px solid #0d9488;
+  padding: 8px 12px;
+  margin: 12px 0;
+  font-size: 9.5pt;
+}
+
+.letter-notes p {
+  margin: 0;
+}
+
+.letter-notes p:first-child {
+  margin-bottom: 4px;
+}
+
+.letter-closing {
+  margin-top: 12px;
+}
+
+.letter-signatures {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 24px;
+  font-size: 10pt;
+}
+
+.sig-col {
+  width: 45%;
+  text-align: center;
+}
+
+.sig-col p {
+  margin: 0;
+}
+
+.sig-role {
+  font-weight: 600;
+  margin-top: 2px !important;
+}
+
+.sig-space {
+  height: 60px;
+}
+
+.sig-name {
+  margin: 0 !important;
+}
+
+.sig-nip {
+  font-size: 9pt;
+  color: #64748b;
+  margin-top: 2px !important;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #dispensasiModal,
+  #dispensasiModal * {
+    visibility: visible;
+  }
+  #dispensasiModal {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    background: #ffffff !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: block !important;
+  }
+  .box-dispensasi {
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    max-height: none !important;
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+  .no-print,
+  .modal-dispensasi-actions {
+    display: none !important;
+  }
+  .dispensasi-letter {
+    padding: 0 !important;
+    width: 100% !important;
+  }
+}
